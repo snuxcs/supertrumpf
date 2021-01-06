@@ -4,7 +4,7 @@ import * as React from 'react';
 import './Card.css';
 import Animal from './Animal.js';
 
-const uncovered = false;
+const uncovered = true;
 
 export default function Card() {
     const elephant = new Animal(
@@ -12,9 +12,11 @@ export default function Card() {
     );
     const front = (
         <div className="card">
-            <h1>{elephant.name}</h1>
+            <h1>{elephant.name ? elephant.name : 'Unbekannt'}</h1>
+            {elephant.image && (
             <img alt="Elefant" src={`${process.env.PUBLIC_URL}${elephant.image}`}
                  height="200" width="200"/>
+            )}
             <table>
                 <tbody>
                 {Object.keys(Animal.properties).map(property =>{
