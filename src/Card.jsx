@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import './Card.css';
 import Animal from './Animal.js';
 
-export default function Card({animal, uncovered}) {
-
+export default function Card({animal, uncovered, onSelectProperty, selectedProperty}) {
     const front = (
         <div className="card">
             <h1>{animal.name ? animal.name : 'Unbekannt'}</h1>
@@ -18,7 +17,9 @@ export default function Card({animal, uncovered}) {
                 {Object.keys(Animal.properties).map(property =>{
                     const animalProperty = Animal.properties[property];
                     return (
-                        <tr key={property}>
+                        <tr key={property}
+                          className={selectedProperty === property ? 'active' : ''}
+                          onClick = {() => { onSelectProperty(property) }}>
                             <td>{animalProperty.label}</td>
                             <td>
                                 {animal[property]}&nbsp;
@@ -43,4 +44,6 @@ export default function Card({animal, uncovered}) {
 Card.propTypes = {
     uncovered: PropTypes.bool.isRequired,
     animal: PropTypes.object.isRequired,
+    onSelectProperty: PropTypes.func,
+    selectedProperty: PropTypes.string,
 };

@@ -35,3 +35,7 @@ img {
     height: 388px;
     background-color: green;
 }
+
+tr:nth-child(2n -1).active, .active{
+    background-color: yellow;
+}
