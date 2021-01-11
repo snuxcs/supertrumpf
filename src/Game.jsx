@@ -17,19 +17,33 @@ export default class Game extends React.Component {
             computerUncovered: false,
             selectedProperty: '',
             playersTurn: true,
-
-            player: [new Animal('Elefant', 'placeholder.jpg', 3.3, 6000, 70, 1, 40),
-                new Animal('Flusspferd', 'placeholder.jpg', 1.5, 1800, 50, 1, 30)],
-
-            computer: [new Animal('Nashorn', 'placeholder.jpg', 1, 9, 2300, 50, 1, 50),
-                new Animal ('Krokodil', 'placeholder.jpg', 5.2, 1000, 70, 60, 29)],
+            player: [],
+            computer: [],
         };
 
+    async componentDidMount() {
+        const request = await fetch('http://localhost:3001/card');
+        const data = await request.json();
+        const computer = [];
+        const player = [];
+        data.forEach((card, index) => {
+            const animal = new Animal(card.name, card.image, card.size, card.weight, card.age, card.offspring, card.speed);
+            if(index % 2 === 0) {
+                computer.push(animal);
+            } else {
+                player.push(animal);
+            }
+        });
+        this.setState(state => update(state, {player: {$set: player}, computer: {$set: computer},}),);
+    }
+
     getSelectPropertyHandler() {
+
         return property => this.play(property);
     }
 
     compare(property) {
+        console.log(property);
         let playersTurn = this.state.playersTurn;
 
         const firstPlayer = this.state.player[0];
@@ -106,8 +120,10 @@ export default class Game extends React.Component {
                     {playersTurn ? 'Du bist ' : 'Der Computer ist'} an der Reihe
                 </div>
                 <div className="cards">
-                    <Card animal={player[0]} uncovered={true} selectedProperty={selectedProperty} onSelectProperty={this.getSelectPropertyHandler()}/>
-                    <Card animal={computer[0]} uncovered={computerUncovered} selectedProperty={selectedProperty}/>
+                    {player[0] && (
+                    <Card animal={player[0]} uncovered={true} selectedProperty={selectedProperty} onSelectProperty={this.getSelectPropertyHandler()}/>)}
+                    {computer [0] && (
+                    <Card animal={computer[0]} uncovered={computerUncovered} selectedProperty={selectedProperty}/>)}
                 </div>
             </div>
         );
